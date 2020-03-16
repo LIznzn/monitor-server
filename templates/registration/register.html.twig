@@ -3,13 +3,34 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <div class="container form-signin">
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+            <p>Already have an account? <a href="{{ path('app_login') }}">Log in</a></p>
+        </div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_start(registrationForm) }}
+        <div class="form-label-group">
+            {{ form_widget(registrationForm.email, {'attr' : {'placeholder':'Email'}}) }}
+            <label for="{{ registrationForm.email.vars.id }}">Email</label>
+            {{ form_errors(registrationForm.email) }}
+        </div>
+        <div class="form-label-group">
+            {{ form_widget(registrationForm.Password.first, {'attr' : {'placeholder':'Password'}}) }}
+            <label for="{{ registrationForm.email.vars.id }}">Password</label>
+            {{ form_errors(registrationForm.Password.first) }}
+        </div>
+        <div class="form-label-group">
+            {{ form_widget(registrationForm.Password.second, {'attr' : {'placeholder':'Password'}}) }}
+            <label for="{{ registrationForm.email.vars.id }}">Repeat Password</label>
+            {{ form_errors(registrationForm.Password.second) }}
+        </div>
+        <div class="checkbox mb-3">
+            {{ form_row(registrationForm.agreeTerms) }}
+        </div>
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        <button class="btn btn-lg btn-primary btn-block">Sign Me Up</button>
+        {{ form_end(registrationForm) }}
+        <p class="mt-5 mb-3 text-muted text-center">&copy; StarMoe 2020</p>
+    </div>
 {% endblock %}
