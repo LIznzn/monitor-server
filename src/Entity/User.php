@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +36,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Node", mappedBy="user", orphanRemoval=true)
+     */
+    private $nodes;
+
+    public function __construct()
+    {
+        $this->nodes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -111,5 +123,36 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Node[]
+     */
+    public function getNodes(): Collection
+    {
+        return $this->nodes;
+    }
+
+    public function addNode(Node $node): self
+    {
+        if (!$this->nodes->contains($node)) {
+            $this->nodes[] = $node;
+            $node->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNode(Node $node): self
+    {
+        if ($this->nodes->contains($node)) {
+            $this->nodes->removeElement($node);
+            // set the owning side to null (unless already changed)
+            if ($node->getUser() === $this) {
+                $node->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
